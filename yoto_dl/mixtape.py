@@ -1,6 +1,7 @@
 import json
 
-class Track():
+
+class Track:
     def __init__(self, title: str, artist: str, link: str):
         self.title = title
         self.artist = artist
@@ -9,7 +10,8 @@ class Track():
     def __str__(self):
         return f"{self.title} by {self.artist}"
 
-class Mixtape():
+
+class Mixtape:
     def __init__(self, name: str):
         self.name = name
         self.tracks = []
@@ -46,28 +48,20 @@ class Mixtape():
         mixtape_dict = {
             "name": self.name,
             "tracks": [
-                {
-                    "title": track.title,
-                    "artist": track.artist,
-                    "link": track.link
-                } for track in self.tracks
-            ]
+                {"title": track.title, "artist": track.artist, "link": track.link}
+                for track in self.tracks
+            ],
         }
         return json.dumps(mixtape_dict, indent=4)
 
     @staticmethod
-    def load(json_str: str) -> 'Mixtape':
+    def load(json_str: str) -> "Mixtape":
         """
         Loads the mixtape from a JSON string.
         """
         mixtape_dict = json.loads(json_str)
         mixtape = Mixtape(mixtape_dict["name"])
         for track_dict in mixtape_dict["tracks"]:
-            track = Track(
-                track_dict["title"],
-                track_dict["artist"],
-                track_dict["link"]
-            )
+            track = Track(track_dict["title"], track_dict["artist"], track_dict["link"])
             mixtape.add_track(track)
         return mixtape
-
