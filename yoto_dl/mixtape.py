@@ -6,6 +6,9 @@ class Track():
         self.artist = artist
         self.link = link
 
+    def __str__(self):
+        return f"{self.title} by {self.artist}"
+
 class Mixtape():
     def __init__(self, name: str):
         self.name = name
@@ -14,12 +17,12 @@ class Mixtape():
     def add_track(self, track: Track):
         self.tracks.append(track)
 
-    def remove_track(self, track: Track):
-        self.tracks.remove(track)
+    def remove_tracks(self, indices: list):
+        self.tracks = [track for i, track in enumerate(self.tracks) if i not in indices]
 
     def list_tracks(self):
         for track in self.tracks:
-            print(f"{track.title} by {track.artist} ({track.link})")
+            print(track)
 
     def save(self) -> str:
         """

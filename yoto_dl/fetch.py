@@ -1,5 +1,7 @@
 import yt_dlp
 
+from .mixtape import Track
+
 def default_hook(d):
     if d['status'] == 'finished':
         print('Done downloading, now converting ...')
@@ -40,7 +42,6 @@ class Fetch():
             'outtmpl': '%(title)s.%(ext)s',
         }
         self.ytdl = yt_dlp.YoutubeDL(self.options)
-        self.queue = []
 
     def add_progress_hook(self, hook: callable = default_hook) -> None:
         """
@@ -50,17 +51,10 @@ class Fetch():
             self.options['progress_hooks'] = []
         self.options['progress_hooks'].append(hook)
 
-    def queue(self, title: str, url: str) -> None:
+    def download(self, track: Track) -> None:
         """
-        Queues a media URL for downloading.
+        Downloads a track.
         """
-        self.queue.append((title, url))
-
-    def download(self) -> None:
-        """
-        Downloads all queued media URLs.
-        """
-        for title, url in self.queue:
-            self.options['outtmpl'] = f"{title}.%(ext)s"
-            with yt_dlp.YoutubeDL(self.options) as ydl:
-                ydl.download([url])
+        self.options['outtmpl'] = f"{track.title}.%(ext)s"
+        with yt_dlp.YoutubeDL(self.options) as ydl:
+            ydl.download([track.link])
